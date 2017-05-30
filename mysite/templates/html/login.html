@@ -4,11 +4,11 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title></title>	
-		<link rel="stylesheet" href="../assets/css/core.css" />
-		<link rel="stylesheet" href="../assets/css/menu.css" />
-		<link rel="stylesheet" href="../assets/css/amazeui.css" />
-		<link rel="stylesheet" href="../assets/css/component.css" />
-		<link rel="stylesheet" href="../assets/css/page/form.css" />
+		<link rel="stylesheet" href="/static/css/core.css" />
+		<link rel="stylesheet" href="/static/css/menu.css" />
+		<link rel="stylesheet" href="/static/css/amazeui.css" />
+		<link rel="stylesheet" href="/static/css/component.css" />
+		<link rel="stylesheet" href="/static/css/page/form.css" />
 	</head>
 	<body>
 		<div class="account-pages">
@@ -22,14 +22,14 @@
 	                    <h4 class="text-uppercase font-bold m-b-0">Sign In</h4>
 	                </div>
 	                <div class="panel-body">
-	                	<form class="am-form">
+	                	<form class="am-form" method="post">
 	                		<div class="am-g">
 	                			<div class="am-form-group">
-							      <input type="email" class="am-radius"  placeholder="Username">
+							      <input type="text" class="am-radius" name='name' placeholder="Username">
 							    </div>
 							
 							    <div class="am-form-group form-horizontal m-t-20">
-							      <input type="password" class="am-radius"  placeholder="Password">
+							      <input type="password" class="am-radius" name="password"  placeholder="Password">
 							    </div>
 							    
 							    <div class="am-form-group ">
@@ -39,7 +39,7 @@
 		                        </div>
 		                        
 		                        <div class="am-form-group ">
-		                        	<button type="button" class="am-btn am-btn-primary am-radius" style="width: 100%;height: 100%;">Log In</button>
+		                        	<button type="submit" class="am-btn am-btn-primary am-radius" style="width: 100%;height: 100%;">Log In</button>
 		                        </div>
 		                        
 		                        <div class="am-form-group ">
