@@ -4,8 +4,8 @@ import requests
 import json
 import datetime
 import time
-import gevent
-from gevent import monkey;monkey.patch_all()#有IO才做时需要这一句
+# import gevent
+# from gevent import monkey;monkey.patch_all()#有IO才做时需要这一句
 
 from django.core.management.base import BaseCommand, CommandError
 from lottery.models import ChongQing_Lottery_Num
