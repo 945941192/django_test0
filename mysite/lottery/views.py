@@ -9,4 +9,4 @@ from django.core.urlresolvers import reverse
 
 def ChongQing(request):
 
-	return HttpResponse('kkkk')
+	return render(request,'lottery/lottery_num_analysis.html')
