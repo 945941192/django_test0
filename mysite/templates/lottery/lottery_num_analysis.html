@@ -13,6 +13,7 @@
 		<link rel="stylesheet" href="/static/css/page/form.css" />
 		<link rel="stylesheet" href="/static/css/component.css" />
 		<script src="/static/js/echarts.min.js"></script>
+		<script type="text/javascript" src="/static/js/jquery-2.1.0.js" ></script>
 	</head>
 	<body>
 
@@ -90,35 +91,65 @@
 		
 			
 		</div>
+
+			<div class="am-u-md-4">
+				<!-- <div class="card-box">
+					<h4 class="header-title m-t-0">环形图</h4> -->
+					<!-- <div id="index-pie-1" style="height: 345px;height: 300px;"></div> -->
+					<div id="main" style="width: 600px;height:400px;"></div>
+				<!-- </div> -->
+			</div>
+
 			<div id="main" style="width: 600px;height:400px;"></div>
 		</div>
 		
 		<script type="text/javascript">
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main'));
 
-        // 指定图表的配置项和数据
-        var option = {
-            title: {
-                text: 'ECharts 入门示例'
-            },
-            tooltip: {},
-            legend: {
-                data:['销量']
-            },
-            xAxis: {
-                data: ["0","1","2","3","4","5","6","7","8","9"]
-            },
-            yAxis: {},
-            series: [{
-                name: '销量',
-                type: 'bar',
-                data: [{{zreo_num}},{{one_num}},{{two_num}},{{three_num}},{{four_num}},{{five_num}},{{six_num}},{{seven_num}},{{eight_num}},{{nine_num}}]
-            }]
-        };
+	       var myChart = echarts.init(document.getElementById('main'));
 
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
+	       myChart.showLoading();
+			// 显示标题，图例和空的坐标轴
+			myChart.setOption({
+			    title: {
+			        text: '异步数据加载示例'
+			    },
+			    tooltip: {},
+			    legend: {
+			        data:['销量']
+			    },
+			    xAxis: {
+			        data: []
+			    },
+			    yAxis: {},
+			    series: [{
+			        name: '销量',
+			        type: 'bar',
+			        data: []
+			    }]
+			});
+
+			// 异步加载数据
+			$.post('{% url "lottery:chongqing" %}').done(function (data) {
+				myChart.hideLoading();
+				// alert(data['one_num'])
+
+				// for (key in data) {
+				// 	alert(data[key]);
+				// 	}
+
+			    // 填入数据
+			    myChart.setOption({
+			        xAxis: {
+			            data: ['0','1','2','3','4','5','6','7','8','9']
+			        },
+			        series: [{
+			            // 根据名字对应到相应的系列
+			            name: '销量',
+			            data: [data.zreo_num,data.one_num,data.two_num,data.three_num,data.four_num,data.five_num,data.six_num,data.seven_num,data.eight_num,data.nine_num]
+			        }]
+			    });
+			});
+	       
     </script>
 	
 		

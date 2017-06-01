@@ -4,8 +4,7 @@ import requests
 import json
 import datetime
 import time
-# import gevent
-# from gevent import monkey;monkey.patch_all()#有IO才做时需要这一句
+
 
 from django.core.management.base import BaseCommand, CommandError
 from lottery.models import ChongQing_Lottery_Num
@@ -18,7 +17,7 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 
 		start = time.time()
-		days = dateRange("2017-01-01", "2017-12-31")
+		days = dateRange("2010-01-01", "2013-12-31")
 		url_list = get_url(days)
 		get_html_data(url_list)
 		end = time.time()
@@ -62,7 +61,7 @@ def analysys_data(lottery_data):
 		phase = obj.get('phase')
 		time_draw = obj.get('time_draw')
 		data =''.join(obj.get('result').get('result')[0].get('data'))
-		# print(data)
+		print(time_draw,data)
 		#save
 		ChongQing_Lottery_Num.objects.get_or_create(phase = phase,time_draw = time_draw,num_data = data)
 
