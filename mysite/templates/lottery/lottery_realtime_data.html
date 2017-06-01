@@ -12,39 +12,15 @@
 		<link rel="stylesheet" href="/static/css/page/typography.css" />
 		<link rel="stylesheet" href="/static/css/page/form.css" />
 		<link rel="stylesheet" href="/static/css/component.css" />
+		<link rel="stylesheet" href="/static/css/jquery.dataTables.min.css" />
 		<script src="/static/js/echarts.min.js"></script>
-		<script type="text/javascript" src="/static/js/jquery-2.1.0.js" ></script>
+		<script type="text/javascript" src="/static/js/jquery-2.1.0.js" ></script> 
+		<script type="text/javascript" src="/static/js/jquery.dataTables.min.js" ></script>  
 	</head>
 	<body>
-
-		<header class="am-topbar am-topbar-fixed-top">		
-			<div class="am-topbar-left am-hide-sm-only">
-                <a href="index.html" class="logo"><span>Admin<span>to</span></span><i class="zmdi zmdi-layers"></i></a>
-            </div>
-	
-			<div class="contain">
-				<ul class="am-nav am-navbar-nav am-navbar-left">
-
-					<li><h4 class="page-title">基本表格</h4></li>
-				</ul>
-				
-				<ul class="am-nav am-navbar-nav am-navbar-right">
-					<li class="inform"><i class="am-icon-bell-o" aria-hidden="true"></i></li>
-					<li class="hidden-xs am-hide-sm-only">
-                        <form role="search" class="app-search">
-                            <input type="text" placeholder="Search..." class="form-control">
-                            <a href=""><img src="/static/img/search.png"></a>
-                        </form>
-                    </li>
-				</ul>
-			</div>
-		</header>
-	
-		
-		
 		<div class="admin">
 	
-				  <div class="admin-sidebar am-offcanvas  am-padding-0" id="admin-offcanvas">
+				 <div class="admin-sidebar am-offcanvas  am-padding-0" id="admin-offcanvas">
 				    <div class="am-offcanvas-bar admin-offcanvas-bar">
 				    
 						<div class="user-box am-hide-sm-only">
@@ -80,75 +56,66 @@
 						      </ul>
 						    </li>
 			
-						  </ul>
-				</div>
-				  </div>
-		
-		
-		
-		
+						 </ul>
+					</div>
+				 </div>
 
 		<div class="content-page">
-		
-			
-		</div>
+<!-- 		</div> -->
+			<!-- <div class="am-u-sm-61"> -->
+				<!-- <div class="card-box"> -->
+					<table class="am-table" id='example' cellspacing="0" width="100%">
+					    <thead>
+					        <tr>
+					            <th>期数</th>
+					            <th>号码</th>
+					            <th>时间</th>
+					        </tr>
+					    </thead>
+					    <tfoot>
+					        <tr>
+					            <th>期数</th>
+					            <th>号码</th>
+					            <th>时间</th>
+					        </tr>
+					    </tfoot>
+					    <tbody>
+					    {% for i in data %}
+					        <tr>
+					            <td>{{i.expect}}</td>
+					            <td>{{i.opencode}}</td>
+					            <td>{{i.opentime}}</td>
+					        </tr>
+					    {% endfor %}
+					    </tbody>
+					</table>
+				<!-- </div> -->
+			<!-- </div> -->
 
-			<div class="am-u-md-41">
-				<div id="main" style="width: 600px;height:400px;"></div>
-			</div>
+<!-- 			
+		</div> -->
 
-			
-		</div>
+	
+
+
 
 
 		<script type="text/javascript">
 
-	       var myChart = echarts.init(document.getElementById('main'));
+	    	$(document).ready(function() {
+			    $('#example').DataTable({
+			    	"order": [[ 0, "desc" ]]
 
-	       myChart.showLoading();
-			// 显示标题，图例和空的坐标轴
-			myChart.setOption({
-			    title: {
-			        text: '异步数据加载示例'
-			    },
-			    tooltip: {},
-			    legend: {
-			        data:['销量']
-			    },
-			    xAxis: {
-			        data: []
-			    },
-			    yAxis: {},
-			    series: [{
-			        name: '销量',
-			        type: 'bar',
-			        data: []
-			    }]
-			});
 
-			// 异步加载数据
-			$.post('{% url "lottery:chongqing" %}').done(function (data) {
-				myChart.hideLoading();
-				// alert(data['one_num'])
-
-				// for (key in data) {
-				// 	alert(data[key]);
-				// 	}
-
-			    // 填入数据
-			    myChart.setOption({
-			        xAxis: {
-			            data: ['0','1','2','3','4','5','6','7','8','9']
-			        },
-			        series: [{
-			            // 根据名字对应到相应的系列
-			            name: '销量',
-			            data: [data.zreo_num,data.one_num,data.two_num,data.three_num,data.four_num,data.five_num,data.six_num,data.seven_num,data.eight_num,data.nine_num]
-			        }]
 			    });
-			});
+			} );
 	       
-    </script>
+	   
+
+
+
+
+   		</script>
 	
 		
 

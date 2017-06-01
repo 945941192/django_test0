@@ -1,4 +1,9 @@
 #coding=utf-8
+import requests
+import json
+
+
+
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 from django.core.urlresolvers import reverse
@@ -13,7 +18,7 @@ def ChongQing(request):
 	if request.method == "GET":
 		return render(request,'lottery/lottery_num_analysis.html')
 	else:
-		num_data_set = ChongQing_Lottery_Num.objects.all().order_by('-phase')[:500]
+		num_data_set = ChongQing_Lottery_Num.objects.all().order_by('-phase')[:600]
 		list_all = []
 
 		for obj in num_data_set:
@@ -34,3 +39,13 @@ def ChongQing(request):
 
 		print(one_num) 
 		return JsonResponse(data)
+
+
+def RealTimeDate(request):
+	if request.method == 'GET':
+		html_data = requests.get('http://f.apiplus.net/cqssc-50.json')
+		if html_data.status_code == 200:
+			context = json.loads(html_data.text)
+		else:
+			return HttpResponse('api erro')
+		return render(request,'lottery/lottery_realtime_data.html',context)
