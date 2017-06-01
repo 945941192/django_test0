@@ -47,10 +47,10 @@
 						 <ul class="am-list admin-sidebar-list">
 						    <li><a href="index.html"><span class="am-icon-home"></span> 首页</a></li>
 						    <li class="admin-parent">
-						      <a class="am-cf" data-am-collapse="{target: '#collapse-nav1'}"><span class="am-icon-table"></span> 表格 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+						      <a class="am-cf" data-am-collapse="{target: '#collapse-nav1'}"><span class="am-icon-table"></span> 重庆时时彩 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
 						      <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav1">
-						        <li><a href="html/table_basic.html" class="am-cf"> 基本表格</span></a></li>
-						        <li><a href="html/table_complete.html">完整表格</a></li>
+						        <!-- <li><a href="html/table_basic.html" class="am-cf"> 基本表格</span></a></li>
+						        <li><a href="html/table_complete.html">完整表格</a></li> -->
 						        <li><a href="{% url 'lottery:chongqing' %}">重庆数据统计</a></li>
 						        <li><a href="{% url 'lottery:realtimedata' %}">重庆实时数据</a></li>
 						      </ul>
@@ -104,7 +104,14 @@
 
 	    	$(document).ready(function() {
 			    $('#example').DataTable({
-			    	"order": [[ 0, "desc" ]]
+			    	"order": [[ 0, "desc" ]],
+			    	"language": {
+                        "lengthMenu": "每页 _MENU_ 条记录",
+                        "zeroRecords": "没有找到记录",
+                        "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
+                        "infoEmpty": "无记录",
+                        "infoFiltered": "(从 _MAX_ 条记录过滤)"
+                    },
 
 
 			    });
