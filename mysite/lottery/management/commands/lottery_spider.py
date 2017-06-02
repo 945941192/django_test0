@@ -17,7 +17,7 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 
 		start = time.time()
-		days = dateRange("2010-01-01", "2013-12-31")
+		days = dateRange("2017-01-01", "2017-12-31")
 		url_list = get_url(days)
 		get_html_data(url_list)
 		end = time.time()

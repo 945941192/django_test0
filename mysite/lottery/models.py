@@ -24,7 +24,23 @@ class ChongQing_Lottery_Num(models.Model):
 	updated_at = models.DateTimeField(auto_now=True)
 
 	def __unicode__(self):
-		return self.name
+		return self.phase
 
 	class Meta():
 		db_table = 'chongqing_num'
+
+#预测一 7位数
+class ForecastOne(models.Model):
+	phase = models.CharField(max_length=50,default='')
+	forecast_code = models.CharField(max_length=50,default='')
+	opentime = models.CharField(max_length=50,default='')
+	opencode = models.CharField(max_length=50,default='')
+	code = models.IntegerField()
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
+
+	def __unicode__(self):
+		return self.phase
+
+	class Meta():
+		db_table = 'forecastone'

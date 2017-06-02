@@ -7,7 +7,7 @@ import json
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 from django.core.urlresolvers import reverse
-from lottery.models import ChongQing_Lottery_Num
+from lottery.models import ChongQing_Lottery_Num,ForecastOne
 # Create your views here.
 
 
@@ -49,3 +49,8 @@ def RealTimeDate(request):
 		else:
 			return HttpResponse('api erro')
 		return render(request,'lottery/lottery_realtime_data.html',context)
+
+def ForecastOneHandle(request):
+	if request.method == 'GET':
+		forecash_set = ForecastOne.objects.all()
+		return render(request,'lottery/lottery_forecast_one.html',{'forecash_set':forecash_set})
