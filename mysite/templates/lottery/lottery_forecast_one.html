@@ -59,52 +59,54 @@
 			
 						 </ul>
 					</div>
-				 </div>
+		</div>
 
 		<div class="content-page">
-<!-- 		</div> -->
-			<!-- <div class="am-u-sm-61"> -->
-				<!-- <div class="card-box"> -->
-					<table class="am-table" id='example' cellspacing="0" width="100%">
-					    <thead>
-					        <tr>
-					            <th>期数</th>
-					            <th>预测号码</th>
-					            <th>开奖号码</th>
-					            <th>开奖时间</th>
-					             <th>状态</th>
-					        </tr>
-					    </thead>
-					    <tfoot>
-					        <tr>
-					            <th>期数</th>
-					            <th>预测号码</th>
-					            <th>开奖号码</th>
-					            <th>开奖时间</th>
-					            <th>状态</th>
-					        </tr>
-					    </tfoot>
-					    <tbody>
-					    {% for i in forecash_set %}
-					        <tr>
-					            <td>{{i.phase}}</td>
-					            <td>{{i.forecast_code}}</td>
-					            <td>{{i.opencode}}</td>
-					            <td>{{i.opentime}}</td>
-					            {% if i.code == 1 %}
-					            	<td style="color: red">{{i.code}}</td>
-					            {% else %}
-					            	<td>0</td>
-					            {% endif %}
-					        </tr>
-					    {% endfor %}
-					    </tbody>
-					</table>
-				<!-- </div> -->
-			<!-- </div> -->
+			<table class="am-table" id='example' cellspacing="0" width="100%">
+			    <thead>
+			        <tr>
+			            <th>期数</th>
+			            <th>预测号码</th>
+			            <th>开奖号码</th>
+			            <th>开奖时间</th>
+			             <th>状态</th>
+			        </tr>
+			    </thead>
+			    <tfoot>
+			        <tr>
+			            <th>期数</th>
+			            <th>预测号码</th>
+			            <th>开奖号码</th>
+			            <th>开奖时间</th>
+			            <th>状态</th>
+			        </tr>
+			    </tfoot>
+			    <tbody>
+			    {% for i in forecash_set %}
+			        <tr>
+			            <td>{{i.phase}}</td>
+			            <td>{{i.forecast_code}}</td>
+			            <td>{{i.opencode}}</td>
+			            <td>{{i.opentime}}</td>
+			            {% if i.code == 1 %}
+			            	<td style="color: red">{{i.code}}</td>
+			            {% else %}
+			            	<td>0</td>
+			            {% endif %}
+			        </tr>
+			    {% endfor %}
+			    </tbody>
+			</table>
 
-<!-- 			
-		</div> -->
+			<h2>bingtu</h2>
+
+			<div id="main" style="width: 600px;height:400px;"></div>
+
+
+
+
+
+		</div>
 
 	
 
@@ -113,25 +115,56 @@
 
 		<script type="text/javascript">
 
-			// setTimeout(function(){location.reload()},200000); //指定2分钟刷新一次
+			setTimeout(function(){location.reload()},200000); //指定2分钟刷新一次
 
 	    	$(document).ready(function() {
 			    $('#example').DataTable({
 			    	"order": [[ 0, "desc" ]],
-			    	"language": {
-                        "lengthMenu": "每页 _MENU_ 条记录",
-                        "zeroRecords": "没有找到记录",
-                        "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
-                        "infoEmpty": "无记录",
-                        "infoFiltered": "(从 _MAX_ 条记录过滤)"
-                    },
+			    	// "language": {
+        //                 "lengthMenu": "每页 _MENU_ 条记录",
+        //                 "zeroRecords": "没有找到记录",
+        //                 "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
+        //                 "infoEmpty": "无记录",
+        //                 "infoFiltered": "(从 _MAX_ 条记录过滤)"
+        //             },
 
 
 			    });
 			} );
 	       
 	   
+		    // 基于准备好的dom，初始化echarts实例
+	        var myChart = echarts.init(document.getElementById('main'));
+	        myChart.setOption({
+	        	 title : {
+				        text: '某站点用户访问来源',
+				        subtext: '纯属虚构',
+				        x:'center'
+				    },
+				    tooltip : {
+				        trigger: 'item',
+				        formatter: "{a} <br/>{b} : {c} ({d}%)"
+				    },
+				    legend: {
+				        orient: 'vertical',
+				        left: 'left',
+				        data: ['中','没中']
+				    },
+			    series : [
+			        {
+			            name: '访问来源',
+			            type: 'pie',
+			            radius: '55%',
+			            data:[
+			                {value:{{count1}}, name:'中'},
+			                {value:{{count2}}, name:'没中'},
+			            ]
+			        }
+			    ]
+			})
 
+	        // 使用刚指定的配置项和数据显示图表。
+	        myChart.setOption(option);
 
 
 
