@@ -4,10 +4,11 @@ import requests
 import json
 import datetime
 import time
+import random
 
 
 from django.core.management.base import BaseCommand, CommandError
-from lottery.models import ChongQing_Lottery_Num
+from lottery.models import ChongQing_Lottery_Num,ForecastOne
 
 class Command(BaseCommand):
 	help = 'wei zhanbiao  zhen shuai qi '
@@ -17,7 +18,7 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 
 		start = time.time()
-		days = dateRange("2017-01-01", "2017-12-31")
+		days = dateRange("2017-04-01", "2017-4-30")
 		url_list = get_url(days)
 		get_html_data(url_list)
 		end = time.time()
@@ -62,7 +63,41 @@ def analysys_data(lottery_data):
 		time_draw = obj.get('time_draw')
 		data =''.join(obj.get('result').get('result')[0].get('data'))
 		print(time_draw,data)
-		#save
+		#save history num 
 		ChongQing_Lottery_Num.objects.get_or_create(phase = phase,time_draw = time_draw,num_data = data)
+
+		#save forecast num 
+		forecase_num_list = [_ for _ in range(10)]
+		rm_one = int(phase[-1])
+		forecase_num_list.remove(rm_one)
+		pre_phase = int(phase) - 1
+		try:
+			obj = ChongQing_Lottery_Num.objects.get(phase = str(pre_phase))
+		except Exception as e:
+			# raise e
+			continue
+		rm_two = int(obj.num_data[2])-1
+		if rm_two == -1:
+			rm_two = 9
+		if rm_two in forecase_num_list:
+			forecase_num_list.remove(rm_two)
+		else:
+			forecase_num_list.remove(forecase_num_list[random.randint(0,8)])
+		rm_three =  random.randint(0,9)
+		if rm_three in forecase_num_list:
+			forecase_num_list.remove(rm_three)
+		else:
+			forecase_num_list.remove(forecase_num_list[random.randint(0,7)])
+		forecase_num = ''.join(map(str,forecase_num_list))
+		if data[-1] in forecase_num:
+			code = 1
+		else:
+			code = 0
+
+		if ForecastOne.objects.filter(phase = phase).exists():
+			print('%s这期预测过了'%phase)
+		else:
+			ForecastOne.objects.create(phase = phase,opencode = data,forecast_code = forecase_num,opentime = time_draw,code = code)
+			print('%s预测开始'%phase)
 
 
