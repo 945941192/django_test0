@@ -18,7 +18,8 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 
 		start = time.time()
-		days = dateRange("2017-04-01", "2017-4-30")
+		#exclude [ limit )
+		days = dateRange("2017-06-07", "2017-6-10")
 		url_list = get_url(days)
 		get_html_data(url_list)
 		end = time.time()
