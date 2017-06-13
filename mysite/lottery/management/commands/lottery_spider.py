@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
 		start = time.time()
 		#exclude [ limit )
-		days = dateRange("2017-06-07", "2017-6-10")
+		days = dateRange("2017-06-13", "2017-6-20")
 		url_list = get_url(days)
 		get_html_data(url_list)
 		end = time.time()
