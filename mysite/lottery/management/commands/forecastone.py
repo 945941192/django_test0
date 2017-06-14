@@ -21,6 +21,7 @@ class Command(BaseCommand):
 			get_html()
 		except Exception as e:
 			time.time(2)
+			print('second 2s')
 			get_html()
 
 

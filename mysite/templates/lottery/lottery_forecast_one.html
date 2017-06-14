@@ -90,9 +90,11 @@
 			            <td>{{i.opencode}}</td>
 			            <td>{{i.opentime}}</td>
 			            {% if i.code == 1 %}
-			            	<td style="color: red">{{i.code}}</td>
-			            {% else %}
-			            	<td>0</td>
+			            	<td style="color: red">中</td>
+			            {% elif i.code == 0 %}
+			            	<td>挂</td>
+			            {% elif i.code == 3 %}
+			            	<td>等待开奖</td>
 			            {% endif %}
 			        </tr>
 			    {% endfor %}
@@ -121,15 +123,6 @@
 	    	$(document).ready(function() {
 			    $('#example').DataTable({
 			    	"order": [[ 0, "desc" ]],
-			    	// "language": {
-        //                 "lengthMenu": "每页 _MENU_ 条记录",
-        //                 "zeroRecords": "没有找到记录",
-        //                 "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
-        //                 "infoEmpty": "无记录",
-        //                 "infoFiltered": "(从 _MAX_ 条记录过滤)"
-        //             },
-
-
 			    });
 			} );
 	       
@@ -164,8 +157,7 @@
 			    ]
 			})
 
-	        // 使用刚指定的配置项和数据显示图表。
-	        myChart.setOption(option);
+	      
 
 
 

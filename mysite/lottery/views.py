@@ -60,8 +60,9 @@ def RealTimeDate(request):
 
 def ForecastOneHandle(request):
 	if request.method == 'GET':
-		get_html()
-		forecash_set = ForecastOne.objects.filter(opentime__gt= '2017-06-04 00:00:00').order_by('-phase')
+		# get_html()
+		#forecash_set = ForecastOne.objects.filter(opentime__gt= '2017-06-04 00:00:00').order_by('-phase')
+		forecash_set = ForecastOne.objects.all()
 		count1 = forecash_set.filter(code=1).count()
 		count2 = forecash_set.count()-count1
 		return render(request,'lottery/lottery_forecast_one.html',{'forecash_set':forecash_set,'count1':count1,'count2':count2})

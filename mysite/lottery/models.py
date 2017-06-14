@@ -32,6 +32,7 @@ class ChongQing_Lottery_Num(models.Model):
 #预测一 7位数
 class ForecastOne(models.Model):
 	phase = models.CharField(max_length=50,default='')
+	#预测下期号码
 	forecast_code = models.CharField(max_length=50,default='')
 	opentime = models.CharField(max_length=50,default='')
 	opencode = models.CharField(max_length=50,default='')
@@ -44,3 +45,7 @@ class ForecastOne(models.Model):
 
 	class Meta():
 		db_table = 'forecastone'
+
+#遗漏统计
+class LeaveOutStatistics(models.Model):
+	phase = models.CharField(max_length=50,default='')

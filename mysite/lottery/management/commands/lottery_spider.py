@@ -16,12 +16,12 @@ class Command(BaseCommand):
 
 
 	def handle(self, *args, **options):
-
 		start = time.time()
 		#exclude [ limit )
-		days = dateRange("2017-06-13", "2017-6-20")
+		days = dateRange("2017-06-14", "2017-6-20")
 		url_list = get_url(days)
 		get_html_data(url_list)
+		judge_forecast_num()
 		end = time.time()
 		print(end-start)
 		print('weizhanbiao')
@@ -63,20 +63,28 @@ def analysys_data(lottery_data):
 		phase = obj.get('phase')
 		time_draw = obj.get('time_draw')
 		data =''.join(obj.get('result').get('result')[0].get('data'))
-		print(time_draw,data)
 		#save history num 
 		ChongQing_Lottery_Num.objects.get_or_create(phase = phase,time_draw = time_draw,num_data = data)
+		if ForecastOne.objects.filter(phase = phase).exists():
+			print('*'*89)
+			wait_update_obj = ForecastOne.objects.get(phase = phase)
+			wait_update_obj.opencode = data
+			wait_update_obj.save()
+			print('ok'*99)
 
-		#save forecast num 
+		#预测号码
 		forecase_num_list = [_ for _ in range(10)]
-		rm_one = int(phase[-1])
+		#下一期期号
+		# import pdb;pdb.set_trace
+		nex_phase = nex_phase_hander(phase)
+		rm_one = int(nex_phase[-1])
 		forecase_num_list.remove(rm_one)
-		pre_phase = int(phase) - 1
 		try:
-			obj = ChongQing_Lottery_Num.objects.get(phase = str(pre_phase))
+			obj = ChongQing_Lottery_Num.objects.get(phase=phase)
 		except Exception as e:
-			# raise e
+			raise e
 			continue
+		#这一期中间号码减一
 		rm_two = int(obj.num_data[2])-1
 		if rm_two == -1:
 			rm_two = 9
@@ -84,21 +92,78 @@ def analysys_data(lottery_data):
 			forecase_num_list.remove(rm_two)
 		else:
 			forecase_num_list.remove(forecase_num_list[random.randint(0,8)])
-		rm_three =  random.randint(0,9)
+		#对称杀
+		# rm_three =  random.randint(0,9)
+		rm_three = int((ChongQing_Lottery_Num.objects.filter(phase__lte=phase).order_by('-phase')[40]).num_data[-1])
 		if rm_three in forecase_num_list:
 			forecase_num_list.remove(rm_three)
 		else:
 			forecase_num_list.remove(forecase_num_list[random.randint(0,7)])
 		forecase_num = ''.join(map(str,forecase_num_list))
-		if data[-1] in forecase_num:
-			code = 1
-		else:
-			code = 0
+		code = 3
 
-		if ForecastOne.objects.filter(phase = phase).exists():
+		if ForecastOne.objects.filter(phase = nex_phase).exists():
 			print('%s这期预测过了'%phase)
 		else:
-			ForecastOne.objects.create(phase = phase,opencode = data,forecast_code = forecase_num,opentime = time_draw,code = code)
+			ForecastOne.objects.create(phase = nex_phase,opencode = '',forecast_code = forecase_num,opentime = time_draw,code = code)
 			print('%s预测开始'%phase)
+
+
+
+
+
+#获取下一期期数
+def nex_phase_hander(phase):
+	today_max_phase = phase[0:8]+'120'
+	today_min_phase = phase[0:8]+'001'
+
+	if phase == today_max_phase:
+		print('max')
+		today = datetime.datetime.strptime(phase[0:8],"%Y%m%d")
+		nex_day = today + datetime.timedelta(days = 1)
+		nex_phase = nex_day.strftime("%Y%m%d") + '001'
+		return nex_phase
+	else:
+		nex_phase = str(int(phase)+1)
+		return nex_phase
+
+
+#获取上一期期数
+def pre_phase_hander(phase):
+	today_min_phase = phase[0:8]+'001'
+	if phase == today_min_phase:
+		today = datetime.datetime.strptime(phase[0:8],"%Y%m%d")
+		pre_day = today - datetime.timedelta(days = 1)
+		pre_phase = pre_day.strftime("%Y%m%d") + '120'
+		return pre_phase
+	else:
+		pre_phase = str(int(phase)-1)
+		return pre_phase
+
+
+#验证预测号码
+def judge_forecast_num():
+	#找出code=3的等待开奖的
+	print('正在检测预测号码的正确性')
+	query_set = ForecastOne.objects.filter(code = 3)
+	for obj in query_set:
+		pre_phase = pre_phase_hander(obj.phase)
+		try:
+			if obj.opencode[-1] in ForecastOne.objects.get(phase=pre_phase).forecast_code:
+				obj.code = 1
+				obj.save()
+			else:
+				obj.code = 0
+				obj.save()
+		except Exception as e:
+			# raise e
+			pass
+
+
+
+
+
+
+
 
 
