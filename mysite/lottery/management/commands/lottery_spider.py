@@ -20,7 +20,7 @@ class Command(BaseCommand):
 		#exclude [ limit )
 		days = dateRange("2017-06-14", "2017-6-20")
 		url_list = get_url(days)
-		judge_forecast_num()
+		# judge_forecast_num()
 		get_html_data(url_list)
 		judge_forecast_num()
 		end = time.time()
@@ -68,11 +68,12 @@ def analysys_data(lottery_data):
 		ChongQing_Lottery_Num.objects.get_or_create(phase = phase,time_draw = time_draw,num_data = data)
 		#保存本期开奖结果
 		if ForecastOne.objects.filter(phase = phase).exists():
-			print('*'*89)
-			wait_update_obj = ForecastOne.objects.get(phase = phase)
-			wait_update_obj.opencode = data
-			wait_update_obj.save()
-			print(('本期%s开奖号码录入'%phase)*9)
+			if not ForecastOne.objects.get(phase = phase).opencode:
+				# print('*'*89)
+				wait_update_obj = ForecastOne.objects.get(phase = phase)
+				wait_update_obj.opencode = data
+				wait_update_obj.save()
+				print(('本期%s开奖号码录入'%phase)*9)
 
 		#预测号码
 		forecase_num_list = [_ for _ in range(10)]
@@ -105,10 +106,11 @@ def analysys_data(lottery_data):
 		code = 3
 		#存入下一期预测号码、创建预测对象
 		if ForecastOne.objects.filter(phase = nex_phase).exists():
-			print('%s这期预测过了'%nex_phase)
+			# print('%s这期预测过了'%nex_phase)
+			pass
 		else:
 			ForecastOne.objects.create(phase = nex_phase,opencode = '',forecast_code = forecase_num,opentime = time_draw,code = code)
-			print('%s预测开始'%nex_phase)
+			print('%s期   ---------  预测号码为 -----------》%s'%(nex_phase,forecase_num))
 
 
 
@@ -149,14 +151,18 @@ def judge_forecast_num():
 	print('正在检测预测号码的正确性')
 	query_set = ForecastOne.objects.filter(code = 3)
 	for obj in query_set:
-		pre_phase = pre_phase_hander(obj.phase)
+		phase = obj.phase
+		# import pdb;pdb.set_trace()
+		# print(obj.phase,obj.forecast_code,'验证正确性的')
 		try:
-			if obj.opencode[-1] in ForecastOne.objects.get(phase=pre_phase).forecast_code:
+			if obj.opencode[-1] in obj.forecast_code:
 				obj.code = 1
 				obj.save()
+				print('%s期---->预测号码为%s------>开奖号码为%s========正确'%(obj.phase,obj.forecast_code,obj.opencode[-1]))
 			else:
 				obj.code = 0
 				obj.save()
+				print('%s期---->预测号码为%s------>开奖号码为%s=====================不正确'%(obj.phase,obj.forecast_code,obj.opencode[-1]))
 		except Exception as e:
 			# raise e
 			pass
@@ -165,16 +171,17 @@ def judge_forecast_num():
 #celery use
 
 def celery_spider():
+		today = datetime.datetime.now().strftime('%Y-%m-%d')
+		tomorrow = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
 		start = time.time()
-		#exclude [ limit )
-		days = dateRange("2017-06-14", "2017-6-20")
+		days = dateRange(today, tomorrow)
 		url_list = get_url(days)
 		judge_forecast_num()
 		get_html_data(url_list)
 		judge_forecast_num()
 		end = time.time()
-		print(end-start)
-		print('weizhanbiao')
+		print('爬取数据所用时间为',end-start)
+		print('weizhanbiao','爬取的时间段是%s'%days)
 
 
 
