@@ -119,6 +119,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+BROKER_URL = 'redis://localhost:6379/0'
+
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Shanghai'

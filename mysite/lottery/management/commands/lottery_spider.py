@@ -20,6 +20,7 @@ class Command(BaseCommand):
 		#exclude [ limit )
 		days = dateRange("2017-06-14", "2017-6-20")
 		url_list = get_url(days)
+		judge_forecast_num()
 		get_html_data(url_list)
 		judge_forecast_num()
 		end = time.time()
@@ -65,12 +66,13 @@ def analysys_data(lottery_data):
 		data =''.join(obj.get('result').get('result')[0].get('data'))
 		#save history num 
 		ChongQing_Lottery_Num.objects.get_or_create(phase = phase,time_draw = time_draw,num_data = data)
+		#保存本期开奖结果
 		if ForecastOne.objects.filter(phase = phase).exists():
 			print('*'*89)
 			wait_update_obj = ForecastOne.objects.get(phase = phase)
 			wait_update_obj.opencode = data
 			wait_update_obj.save()
-			print('ok'*99)
+			print(('本期%s开奖号码录入'%phase)*9)
 
 		#预测号码
 		forecase_num_list = [_ for _ in range(10)]
@@ -101,12 +103,12 @@ def analysys_data(lottery_data):
 			forecase_num_list.remove(forecase_num_list[random.randint(0,7)])
 		forecase_num = ''.join(map(str,forecase_num_list))
 		code = 3
-
+		#存入下一期预测号码、创建预测对象
 		if ForecastOne.objects.filter(phase = nex_phase).exists():
-			print('%s这期预测过了'%phase)
+			print('%s这期预测过了'%nex_phase)
 		else:
 			ForecastOne.objects.create(phase = nex_phase,opencode = '',forecast_code = forecase_num,opentime = time_draw,code = code)
-			print('%s预测开始'%phase)
+			print('%s预测开始'%nex_phase)
 
 
 
@@ -160,6 +162,19 @@ def judge_forecast_num():
 			pass
 
 
+#celery use
+
+def celery_spider():
+		start = time.time()
+		#exclude [ limit )
+		days = dateRange("2017-06-14", "2017-6-20")
+		url_list = get_url(days)
+		judge_forecast_num()
+		get_html_data(url_list)
+		judge_forecast_num()
+		end = time.time()
+		print(end-start)
+		print('weizhanbiao')
 
 
 
