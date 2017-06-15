@@ -18,7 +18,7 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 		start = time.time()
 		#exclude [ limit )
-		days = dateRange("2017-06-14", "2017-6-20")
+		days = dateRange("2017-01-01", "2017-6-20")
 		url_list = get_url(days)
 		# judge_forecast_num()
 		get_html_data(url_list)

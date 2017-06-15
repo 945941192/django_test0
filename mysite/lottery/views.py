@@ -19,7 +19,7 @@ from django.views.generic import View,ListView
 from lottery.management.commands.forecastone import get_html
 
 #celery
-from lottery.tasks import lottery_spider
+from lottery.tasks import lottery_spider,crontab_test
 
 
 
@@ -65,7 +65,8 @@ def ForecastOneHandle(request):
 	if request.method == 'GET':
 		# get_html()
 		#forecash_set = ForecastOne.objects.filter(opentime__gt= '2017-06-04 00:00:00').order_by('-phase')
-		lottery_spider.delay()
+		# lottery_spider.delay()
+		# crontab_test.delay()
 		forecash_set = ForecastOne.objects.all()
 		count1 = forecash_set.filter(code=1).count()
 		count2 = forecash_set.count()-count1
