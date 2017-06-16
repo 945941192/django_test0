@@ -86,6 +86,37 @@ def ForecastOneHandle(request):
 			else:
 				base_maney += 55
 		print('一共%s期------中%s期--------本金为%d'%(money_set.count(),money_set.filter(back_status=1).count(),base_maney))
+		# # 最大连挂
+		# fail_open_set = list(MoneyLostOne.objects.filter(back_status=0).filter(opentime__gt= '2017-06-04 00:00:00'))[:100]
+		# num_data_set = list(ChongQing_Lottery_Num.objects.all().filter(time_draw__gt= '2017-06-04 00:00:00').order_by('phase'))
+		# list1 = [] #对象的索引列表
+		# list_num = [] #对象索引列表  ---》获取连续的索引
+		# list_index = [] #获取连续索引节点
+		# list_index_num = [] #里面是一个一个的索引列表list(list())
+		# for index,i in enumerate(fail_open_set):
+		# 	list1.append(num_data_set.index(ChongQing_Lottery_Num.objects.get(phase = i.put_in_phase)))
+		# print('在数据中的索引位置%s'%list1)
+
+		# for index,i in enumerate(list1):
+		# 	if index<(len(list1)-1):
+		# 		if list1[index+1]-1 == i:
+		# 			list_num.append(i)
+		# print(list_num,'取出索引位置连续的部分')
+
+		# for index,i in enumerate(list_num):
+		# 	if index<(len(list_num)-1):
+		# 		if list_num[index+1]-1 >i:
+		# 			list_index.append(i)
+		# print(list_index,'取出连续部分的节点索引')
+
+		# for index,i in enumerate(list_index):
+		# 	if index == 0:
+		# 		list_index_num.append(list_num[0:i])
+		# 	else:
+		# 		list_index_num.append(list_num[index+1,index])
+
+		# print(list_index_num，)
+
 
 
 
