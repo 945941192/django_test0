@@ -10,7 +10,7 @@ import datetime
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 from django.core.urlresolvers import reverse
-from lottery.models import ChongQing_Lottery_Num,ForecastOne
+from lottery.models import ChongQing_Lottery_Num,ForecastOne,MoneyLostOne
 
 #view generic
 from django.views.generic import View,ListView
@@ -63,14 +63,38 @@ def RealTimeDate(request):
 
 def ForecastOneHandle(request):
 	if request.method == 'GET':
+		#这是第一次网页请求版本
 		# get_html()
 		#forecash_set = ForecastOne.objects.filter(opentime__gt= '2017-06-04 00:00:00').order_by('-phase')
+		# 这是第二次在视图中实现异步
 		# lottery_spider.delay()
 		# crontab_test.delay()
-		forecash_set = ForecastOne.objects.all()
+
+
+		#后一七码的数据展示
+		forecash_set = ForecastOne.objects.filter(opentime__gt= '2017-06-04 00:00:00')
+		#后一七码的正确率展示
 		count1 = forecash_set.filter(code=1).count()
 		count2 = forecash_set.count()-count1
-		return render(request,'lottery/lottery_forecast_one.html',{'forecash_set':forecash_set,'count1':count1,'count2':count2})
+		#后一七码的投注展示  中后跟 
+		money_set = MoneyLostOne.objects.filter(opentime__gt= '2017-06-04 00:00:00')
+		#本金为1000
+		base_maney = 1000
+		for i in money_set:
+			if i.back_status == 0:
+				base_maney -= 140
+			else:
+				base_maney += 55
+		print('一共%s期------中%s期--------本金为%d'%(money_set.count(),money_set.filter(back_status=1).count(),base_maney))
+
+
+
+		return render(request,'lottery/lottery_forecast_one.html',
+			{'forecash_set':forecash_set,
+			'count1':count1,
+			'count2':count2,
+			'money_set':money_set,
+			})
 
 
 def LastOneHandle(request):

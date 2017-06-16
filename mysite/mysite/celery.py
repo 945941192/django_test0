@@ -44,7 +44,7 @@ app.conf.update(
         },
         "mistakes-test": {
             "task": "lottery.tasks.crontab_test",
-            "schedule": timedelta(seconds=15),
+            "schedule": timedelta(minutes=1),
         },
     },
 

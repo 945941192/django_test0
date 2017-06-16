@@ -18,7 +18,7 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 		start = time.time()
 		#exclude [ limit )
-		days = dateRange("2017-01-01", "2017-6-20")
+		days = dateRange("2017-06-01", "2017-6-20")
 		url_list = get_url(days)
 		# judge_forecast_num()
 		get_html_data(url_list)
@@ -106,7 +106,7 @@ def analysys_data(lottery_data):
 		code = 3
 		#存入下一期预测号码、创建预测对象
 		if ForecastOne.objects.filter(phase = nex_phase).exists():
-			# print('%s这期预测过了'%nex_phase)
+			print('%s这期预测过了'%nex_phase)
 			pass
 		else:
 			ForecastOne.objects.create(phase = nex_phase,opencode = '',forecast_code = forecase_num,opentime = time_draw,code = code)

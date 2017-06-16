@@ -36,6 +36,7 @@ class ForecastOne(models.Model):
 	forecast_code = models.CharField(max_length=50,default='')
 	opentime = models.CharField(max_length=50,default='')
 	opencode = models.CharField(max_length=50,default='')
+	#中奖状态 0 不中  1 中  3 等待开奖
 	code = models.IntegerField()
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
@@ -47,5 +48,25 @@ class ForecastOne(models.Model):
 		db_table = 'forecastone'
 
 #遗漏统计
-class LeaveOutStatistics(models.Model):
-	phase = models.CharField(max_length=50,default='')
+# class LeaveOutStatistics(models.Model):
+# 	phase = models.CharField(max_length=50,default='')
+
+
+#后一七码 增量统计
+class MoneyLostOne(models.Model):
+	forecastone = models.OneToOneField(ForecastOne)
+	put_in_phase = models.CharField(max_length=50,default='')
+	opentime = models.CharField(max_length=50,default='')
+	put_in_money = models.IntegerField()
+	# 0 没中  1中了
+	back_status = models.IntegerField()
+	back_money = models.IntegerField()
+
+	def __unicode__(self):
+		return self.put_in_phase
+
+	class Meta():
+		db_table = 'money_lost_one'
+
+
+
