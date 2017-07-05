@@ -21,6 +21,13 @@ from lottery.management.commands.forecastone import get_html
 #celery
 from lottery.tasks import lottery_spider,crontab_test
 
+#logging
+import logging
+
+logger = logging.getLogger('django')
+
+logger.info('start')
+logger.error('error test')
 
 
 
@@ -73,6 +80,7 @@ def ForecastOneHandle(request):
 
 		#后一七码的数据展示
 		forecash_set = ForecastOne.objects.filter(opentime__gt= '2017-06-04 00:00:00')
+		logger.info(str(forecash_set.query))
 		#后一七码的正确率展示
 		count1 = forecash_set.filter(code=1).count()
 		count2 = forecash_set.count()-count1
