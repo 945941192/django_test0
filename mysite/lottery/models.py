@@ -70,3 +70,15 @@ class MoneyLostOne(models.Model):
 
 
 
+
+#django_test
+
+class Item(models.Model):
+    name = models.CharField(max_length=10)
+    data = models.IntegerField()
+    person = models.ForeignKey('person', null=True, blank=True)
+    class Meta:
+        ordering = ["name"]
+
+class Person(models.Model):
+	age = models.IntegerField()
